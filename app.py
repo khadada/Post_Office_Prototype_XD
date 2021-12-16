@@ -8,6 +8,7 @@ class App(Tk):
         self.iconphoto(False, self.logo)
         self.bgc = bgc
         self.config(bg=bgc)
+        self.resizable(False,False)
         
     
     def setup_app(self):
