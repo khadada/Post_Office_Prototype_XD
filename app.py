@@ -1,5 +1,6 @@
 from tkinter import *
-total_amount =10
+total_amount = 120
+remaing_amount = 10
 
 class App(Tk):
     def __init__(self,ttl=' Post Office',bgc="#61BDFA"):
@@ -65,27 +66,34 @@ class App(Tk):
             
             msg_text = Label(msg_pop ,text=default_txt)
             img = None
+            hide = True
             if len(add_amount_input.get()) > 0 and isinstance(int(add_amount_input.get()),int):
                 img = '::tk::icons::question'
                 
             else:
                 img = '::tk::icons::error'
                 msg_text.config(text=error)
+                hide = False
             canvas = Canvas(msg_pop,width=50,height=50,highlightthickness=0)
             canvas.grid(row=0,column=0)
             canvas.create_image(25,25,image=img)
             msg_text.grid(row=0,column=1,columnspan=3)
             def yes_answer():
                 msg_pop.destroy()
-                ok_btn.config(state=NORMAL)
-                return True
+                if hide:
+                     ok_btn.config(state=NORMAL)
+                     print(f'hide value is {hide}')
+                else:
+                    ok_btn.config(state=DISABLED)
+                    print(f'hide value is {hide}')
+                    
             def no_answer():
                 ok_btn.config(state=DISABLED)
                 msg_pop.destroy()
                 return False
-            yes_btn = Button(msg_pop,text="نعم",width=15,pady=10,command=yes_answer)
+            yes_btn = Button(msg_pop,text="نعم",width=10,pady=10,command=yes_answer)
             yes_btn.grid(row=1,column=2)
-            no_btn = Button(msg_pop,text="لا",width=15,pady=10,command=no_answer)
+            no_btn = Button(msg_pop,text="لا",width=10,pady=10,command=no_answer)
             no_btn.grid(row=1,column=3)
                 
             msg_pop.mainloop()
@@ -101,7 +109,9 @@ class App(Tk):
         confirm_amount_btn.grid(row=2,column=2,padx=(10,0))
         def set_add_amount():
             global total_amount
+            global remaing_amount
             total_amount += int(add_amount_input.get())
+            remaing_amount += int(add_amount_input.get())
             amount_win.destroy()
             
             
