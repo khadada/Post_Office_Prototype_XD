@@ -30,7 +30,7 @@ class App(Tk):
         hi_client.grid(row=2,column=1,columnspan=3)
         
         
-        add_amount_btn = Button(self,text='إضافة مبلغ',width=20,pady=10)
+        add_amount_btn = Button(self,text='إضافة مبلغ',width=20,pady=10,command=self.add_amount)
         add_amount_btn.grid(row=3,column=3,padx=10)
         
         pull_amount_btn = Button(self,text='سحب مبلغ',width=20,pady=10)
@@ -130,6 +130,5 @@ class App(Tk):
 
 app = App()
 app.setup_app()
-app.add_amount()
 app.keep_win_open()
 print(f'the total amount you have = {total_amount}')
