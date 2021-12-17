@@ -70,6 +70,7 @@ class App(Tk):
             if len(add_amount_input.get()) > 0 and isinstance(int(add_amount_input.get()),int):
                 img = '::tk::icons::question'
                 
+                
             else:
                 img = '::tk::icons::error'
                 msg_text.config(text=error)
@@ -95,6 +96,8 @@ class App(Tk):
             yes_btn.grid(row=1,column=2)
             no_btn = Button(msg_pop,text="لا",width=10,pady=10,command=no_answer)
             no_btn.grid(row=1,column=3)
+            if not hide:
+                no_btn.grid_forget()
                 
             msg_pop.mainloop()
         amount_win = Tk()
