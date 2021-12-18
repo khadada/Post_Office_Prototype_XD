@@ -1,5 +1,5 @@
 from tkinter import *
-total_amount = 120
+total_amount = 0
 remaing_amount = 10
 retract_count = 0
 push_count = 0
@@ -186,15 +186,28 @@ class App(Tk):
             global total_amount
             global remaing_amount
             global retract_count
-            retract_count +=1 
-            total_amount -= int(pull_amount_input.get())
-            remaing_amount -= int(pull_amount_input.get())
-            print(f'total total amount is: {total_amount}')
-            print(f'total remaing  amount is: {remaing_amount}')
+            if remaing_amount - int(pull_amount_input.get()) > 0:
+                retract_count +=1 
+                remaing_amount -= int(pull_amount_input.get())
+                print(f'total total amount is: {total_amount}')
+                print(f'total remaing  amount is: {remaing_amount}')
+            else:
+                def close_subtract_win():
+                    error.destroy()
+                    pull_win.destroy()
+                    
+                error = Toplevel(pull_win,padx=20,pady=20)
+                msg_text = Label(error ,text='لقد نفقذ رصيدك يرجى شحن الرصيد')
+                msg_text.grid(row=0,column=1,columnspan=2,pady=20)
+                yes_btn = Button(error,text="نعم",width=10,pady=10,command=close_subtract_win)
+                yes_btn.grid(row=1,column=1)
+                error.mainloop()
+                
+                
 
             pull_win.destroy()
             
-            
+        
         ok_btn = Button(pull_win,text=" موافـــق",width=20,pady=10,state=DISABLED,command=set_subtract_amount)
         ok_btn.grid(row=2,column=1,padx=(0,10))
         
