@@ -1,6 +1,9 @@
 from tkinter import *
 total_amount = 120
 remaing_amount = 10
+retract_count = 0
+push_count = 0
+push_amount_total = 0
 
 class App(Tk):
     def __init__(self,ttl=' Post Office',bgc="#61BDFA"):
@@ -33,11 +36,11 @@ class App(Tk):
         add_amount_btn = Button(self,text='إضافة مبلغ',width=20,pady=10,command=self.add_amount)
         add_amount_btn.grid(row=3,column=3,padx=10)
         
-        pull_amount_btn = Button(self,text='سحب مبلغ',width=20,pady=10)
+        pull_amount_btn = Button(self,text='سحب مبلغ',width=20,pady=10,command=self.subtract_amount)
         pull_amount_btn.grid(row=3,column=2,padx=10)
         
         
-        push_amount_btn = Button(self,text='دفع مبلغ',width=20,pady=10)
+        push_amount_btn = Button(self,text='دفع مبلغ',width=20,pady=10,command=self.push_amount)
         push_amount_btn.grid(row=3,column=1,padx=10)
         
         two_row_btn = Frame(self,width=120,bg=bgc)
@@ -124,6 +127,157 @@ class App(Tk):
             
         
         amount_win.mainloop()
+    def subtract_amount(self):
+        def confirm_msg():
+            
+            default_txt = f"هل أنت متأكدة من سحب المبلغ : {pull_amount_input.get()} دج"
+            error = "تأكدي من القيمة "
+                
+            
+            msg_pop = Toplevel(pull_win,padx=20,pady=20)
+            
+            msg_text = Label(msg_pop ,text=default_txt)
+            img = None
+            hide = True
+            if len(pull_amount_input.get()) > 0 and isinstance(int(pull_amount_input.get()),int):
+                img = '::tk::icons::question'
+                
+                
+            else:
+                img = '::tk::icons::error'
+                msg_text.config(text=error)
+                hide = False
+            canvas = Canvas(msg_pop,width=50,height=50,highlightthickness=0)
+            canvas.grid(row=0,column=0)
+            canvas.create_image(25,25,image=img)
+            msg_text.grid(row=0,column=1,columnspan=3)
+            def yes_answer():
+                msg_pop.destroy()
+                if hide:
+                     ok_btn.config(state=NORMAL)
+                     print(f'hide value is {hide}')
+                else:
+                    ok_btn.config(state=DISABLED)
+                    print(f'hide value is {hide}')
+                    
+            def no_answer():
+                ok_btn.config(state=DISABLED)
+                msg_pop.destroy()
+                return False
+            yes_btn = Button(msg_pop,text="نعم",width=10,pady=10,command=yes_answer)
+            yes_btn.grid(row=1,column=2)
+            no_btn = Button(msg_pop,text="لا",width=10,pady=10,command=no_answer)
+            no_btn.grid(row=1,column=3)
+            if not hide:
+                no_btn.grid_forget()
+                
+            msg_pop.mainloop()
+        pull_win = Tk()
+        pull_win.config(padx=60,pady=60,bg=self.bgc)
+        pull_amount_title = Label(pull_win,text="هنا سيتم سحب رصيد",bg=self.bgc)
+        pull_amount_title.grid(row=0,column=0,columnspan=3)
+        pull_amount_input=Entry(pull_win,width=50,borderwidth=15,relief=FLAT)
+        pull_amount_input.grid(row=1,column=1,columnspan=2,pady=50)
+        currency_label = Label(pull_win,text="دج",bg=self.bgc)
+        currency_label.grid(row=1,column=0,padx=10)
+        confirm_amount_btn = Button(pull_win,text="تأكيد العملية",width=20,pady=10,command=confirm_msg)
+        confirm_amount_btn.grid(row=2,column=2,padx=(10,0))
+        def set_subtract_amount():
+            global total_amount
+            global remaing_amount
+            global retract_count
+            retract_count +=1 
+            total_amount -= int(pull_amount_input.get())
+            remaing_amount -= int(pull_amount_input.get())
+            print(f'total total amount is: {total_amount}')
+            print(f'total remaing  amount is: {remaing_amount}')
+
+            pull_win.destroy()
+            
+            
+        ok_btn = Button(pull_win,text=" موافـــق",width=20,pady=10,state=DISABLED,command=set_subtract_amount)
+        ok_btn.grid(row=2,column=1,padx=(0,10))
+        
+            
+        
+        pull_win.mainloop()
+    def push_amount(self):
+        def confirm_msg():  
+            default_txt = f" هل أنت متأكدة من إستلامك المبلغ من الزبون : {push_amount_input.get()} دج"
+            error = "تأكدي من القيمة "
+                
+            
+            msg_pop = Toplevel(push_win,padx=20,pady=20)
+            
+            msg_text = Label(msg_pop ,text=default_txt)
+            img = None
+            hide = True
+            if len(push_amount_input.get()) > 0 and isinstance(int(push_amount_input.get()),int):
+                img = '::tk::icons::question'
+                
+                
+            else:
+                img = '::tk::icons::error'
+                msg_text.config(text=error)
+                hide = False
+            canvas = Canvas(msg_pop,width=50,height=50,highlightthickness=0)
+            canvas.grid(row=0,column=0)
+            canvas.create_image(25,25,image=img)
+            msg_text.grid(row=0,column=1,columnspan=3)
+            def yes_answer():
+                msg_pop.destroy()
+                if hide:
+                     ok_btn.config(state=NORMAL)
+                     print(f'hide value is {hide}')
+                else:
+                    ok_btn.config(state=DISABLED)
+                    print(f'hide value is {hide}')
+                    
+            def no_answer():
+                ok_btn.config(state=DISABLED)
+                msg_pop.destroy()
+                return False
+            yes_btn = Button(msg_pop,text="نعم",width=10,pady=10,command=yes_answer)
+            yes_btn.grid(row=1,column=2)
+            no_btn = Button(msg_pop,text="لا",width=10,pady=10,command=no_answer)
+            no_btn.grid(row=1,column=3)
+            if not hide:
+                no_btn.grid_forget()
+                
+            msg_pop.mainloop()
+        push_win = Tk()
+        push_win.config(padx=60,pady=60,bg=self.bgc)
+        push_amount_title = Label(push_win,text="هنا سيتم دفع رصيد",bg=self.bgc)
+        push_amount_title.grid(row=0,column=0,columnspan=3)
+        push_amount_input=Entry(push_win,width=50,borderwidth=15,relief=FLAT)
+        push_amount_input.grid(row=1,column=1,columnspan=2,pady=50)
+        currency_label = Label(push_win,text="دج",bg=self.bgc)
+        currency_label.grid(row=1,column=0,padx=10)
+        confirm_amount_btn = Button(push_win,text="تأكيد العملية",width=20,pady=10,command=confirm_msg)
+        confirm_amount_btn.grid(row=2,column=2,padx=(10,0))
+        def set_subtract_amount():
+            global total_amount
+            global remaing_amount
+            global push_count
+            global push_amount_total
+            push_count +=1 
+            push_amount_total += int(push_amount_input.get())
+            total_amount += int(push_amount_input.get())
+            remaing_amount += int(push_amount_input.get())
+            push_win.destroy()
+            print(f'total push amount is: {push_amount_total}')
+            
+            
+        ok_btn = Button(push_win,text=" موافـــق",width=20,pady=10,state=DISABLED,command=set_subtract_amount)
+        ok_btn.grid(row=2,column=1,padx=(0,10))
+        
+            
+        
+        push_win.mainloop()
+        
+        
+    def keep_win_open(self):
+        self.mainloop()
         
     def keep_win_open(self):
         self.mainloop()
