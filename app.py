@@ -1,6 +1,6 @@
 from tkinter import *
 total_amount = 0
-remaing_amount = 10
+remaing_amount = 0
 retract_count = 0
 push_count = 0
 push_amount_total = 0
@@ -15,17 +15,23 @@ class App(Tk):
         self.bgc = bgc
         self.config(bg=bgc)
         self.resizable(False,False)
+        self.total_amount_label = None
+        
         
     
     def setup_app(self):
+        global total_amount
+        global remaing_amount
+        total_txt = f" دج {float(total_amount)}"
+        remaining_txt = f" دج {float(remaing_amount)}"
         bgc = self.bgc
         total_amount_label = Label(self,bg=bgc,text=':المبلغ الإجمالي ')
         total_amount_label.grid(row=0,column=4)
-        total_amount_show = Label(self,bg=bgc,text=' 0.0 Da')
+        total_amount_show = Label(self,bg=bgc,text=total_txt)
         total_amount_show.grid(row=1,column=4) 
         remaining_amount_label = Label(self,bg=bgc,text=":الملبغ المتبقي")
         remaining_amount_label.grid(row=0,column=0)
-        remaining_amount_show = Label(self,bg=bgc,text='  0.0 Da')
+        remaining_amount_show = Label(self,bg=bgc,text=remaining_txt)
         remaining_amount_show.grid(row=1,column=0)
         
         
@@ -119,6 +125,7 @@ class App(Tk):
             total_amount += int(add_amount_input.get())
             remaing_amount += int(add_amount_input.get())
             amount_win.destroy()
+            self.update_info()
             
             
         ok_btn = Button(amount_win,text=" موافـــق",width=20,pady=10,state=DISABLED,command=set_add_amount)
@@ -189,8 +196,8 @@ class App(Tk):
             if remaing_amount - int(pull_amount_input.get()) > 0:
                 retract_count +=1 
                 remaing_amount -= int(pull_amount_input.get())
-                print(f'total total amount is: {total_amount}')
-                print(f'total remaing  amount is: {remaing_amount}')
+                pull_win.destroy()
+                self.update_info()
             else:
                 def close_subtract_win():
                     error.destroy()
@@ -205,7 +212,7 @@ class App(Tk):
                 
                 
 
-            pull_win.destroy()
+            pull_win.mainloop()
             
         
         ok_btn = Button(pull_win,text=" موافـــق",width=20,pady=10,state=DISABLED,command=set_subtract_amount)
@@ -278,6 +285,7 @@ class App(Tk):
             total_amount += int(push_amount_input.get())
             remaing_amount += int(push_amount_input.get())
             push_win.destroy()
+            self.update_info()
             print(f'total push amount is: {push_amount_total}')
             
             
@@ -287,7 +295,10 @@ class App(Tk):
             
         
         push_win.mainloop()
+    def update_info(self):
+        self.setup_app()
         
+             
         
     def keep_win_open(self):
         self.mainloop()
