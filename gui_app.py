@@ -4,6 +4,8 @@ from PIL import Image,ImageTk
 # style 
 bgc="#61BDFA" 
 title_font = ('Dubai',24,'bold')
+# vars
+
 # main screen
 master = Tk()
 master.title('برنامج متابعة العمليات')
