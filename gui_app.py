@@ -1,6 +1,6 @@
 # imports
 from tkinter import *
-from tkinter import font
+from tkinter import messagebox
 from PIL import Image,ImageTk
 # style "#61BDFA"
 bgc="#ffb6b6" 
@@ -15,7 +15,6 @@ msg_bgc = '#61BDFA'
 
 # functions
 def confim(win,msg):     
-    global question_icon
     message_box = Toplevel(win)
     message_box.resizable(False,False)
     message_box.config(pady=20,padx=40,bg=msg_bgc)
@@ -31,7 +30,11 @@ def confim(win,msg):
     Button(message_box,text="تراجـع",width=20,pady=10,font=btn_font,command=message_box.destroy).grid(row=1,column=1)
 
 def set_amount():
-    total_result.config(text=f" {float(amount.get())}  دج")
+    old_val = total_result.cget("text") 
+    if old_val =="0.0":
+        old_val = 0    
+    total = int(old_val) + int(amount.get())
+    total_result.config(text=total) 
     add_amount_screen.destroy()
 def add_amount():
     global amount
@@ -50,7 +53,11 @@ def add_amount():
     two_row_btn = Frame(add_amount_screen,width=100,bg=bgc)
     two_row_btn.grid(row=2,column=1,columnspan=2,pady=40)
     # buttons
-    Button(two_row_btn,text='التأكــد',width=30,pady=15,font=btn_font,command=lambda:confim(add_amount_screen,f'هل أنت متأكدة من أن المبلغ الذي يسضاف هو {amount.get()} دج')).grid(row=2,column=1,padx=(0,20))
+    def turn_on():
+        response = messagebox.askquestion('message','هل انت متأكدة')
+        if response=="yes":
+            ok_btn.config(state=NORMAL)
+    Button(two_row_btn,text='التأكــد',width=30,pady=15,font=btn_font,command=turn_on).grid(row=2,column=1,padx=(0,20))
     ok_btn=Button(two_row_btn,text=' موافــق',width=30,pady=15,font=btn_font,state=DISABLED,command=set_amount)
     ok_btn.grid(row=2,column=2,padx=(0,20))
 
